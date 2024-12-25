@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basketball Catching Game</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const player = {
+            x: canvas.width / 2,
+            y: canvas.height - 30,
+            width: 50,
+            height: 10,
+            dx: 0
+        };
+
+        const ball = {
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            radius: 10,
+            dy: 2
+        };
+
+        function drawPlayer() {
+            ctx.fillStyle = 'blue';
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+        }
+
+        function drawBall() {
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.fillStyle = 'orange';
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function update() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            drawPlayer();
+            drawBall();
+
+            ball.y += ball.dy;
+
+            if (ball.y + ball.radius > canvas.height) {
+                ball.y = canvas.height / 2;
+            }
+
+            player.x += player.dx;
+
+            if (player.x < 0) {
+                player.x = 0;
+            } else if (player.x + player.width > canvas.width) {
+                player.x = canvas.width - player.width;
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        function movePlayer(e) {
+            if (e.key === 'ArrowLeft') {
+                player.dx = -5;
+            } else if (e.key === 'ArrowRight') {
+                player.dx = 5;
+            }
+        }
+
+        function stopPlayer(e) {
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                player.dx = 0;
+            }
+        }
+
+        document.addEventListener('keydown', movePlayer);
+        document.addEventListener('keyup', stopPlayer);
+
+        update();
+    </script>
+</body>
+</html>
