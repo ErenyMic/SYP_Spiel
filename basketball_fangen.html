@@ -27,12 +27,15 @@
 
         const ballImage = new Image();
         ballImage.src = 'E:/SYP/SYP_Spiel/Ball-removebg-preview.png'; // Replace with the path to your ball image
+        
+        const playerImage = new Image();
+        playerImage.src = 'E:/SYP/SYP_Spiel/korb-neu.png'; // Replace with the path to your player image
 
         const player = {
             x: canvas.width / 2,
-            y: canvas.height - 30,
-            width: 50,
-            height: 10,
+            y: canvas.height - 50,
+            width: 100,
+            height: 50,
             dx: 0
         };
        
@@ -44,9 +47,9 @@
         };
 
         function drawPlayer() {
-            ctx.fillStyle = 'blue';
-            ctx.fillRect(player.x, player.y, player.width, player.height);
+            ctx.drawImage(playerImage, player.x, player.y, player.width, player.height);
         }
+
 
         function drawBall() {
             ctx.drawImage(ballImage, ball.x - ball.radius, ball.y - ball.radius, ball.radius * 2, ball.radius * 2);
