@@ -39,6 +39,7 @@ function drawBall() {
 function drawBackground() {
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 }
+
 function update() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -46,10 +47,11 @@ function update() {
     drawPlayer();
     drawBall();
 
-    ball.y += ball.dy;
+    ball.y += ball.dy * 2;
 
     if (ball.y + ball.radius > canvas.height) {
-        ball.y = canvas.height / 2;
+        ball.y = canvas.height /8 ;
+        ball.x = Math.random() * canvas.width;
     }
 
     player.x += player.dx;
