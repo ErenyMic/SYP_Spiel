@@ -3,6 +3,7 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+
 const background = new Image();
 background.src = 'Hintergrund.jpg'; // Replace with the path to your background image
 
@@ -71,14 +72,29 @@ function movePlayer(e) {
     }
 }
 
+function movePlayer(e) {
+    const canvasRect = canvas.getBoundingClientRect();
+    player.x = e.clientX - canvasRect.left - player.width / 2;
+
+    // Ensure the player stays within the canvas boundaries
+    if (player.x < 0) {
+        player.x = 0;
+    } else if (player.x + player.width > canvas.width) {
+        player.x = canvas.width - player.width;
+    }
+}
+
+document.addEventListener('mousemove', movePlayer);
+
+background.onload = function() {
+    update();
+}
+
 function stopPlayer(e) {
     if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
         player.dx = 0;
     }
 }
-
-document.addEventListener('keydown', movePlayer);
-document.addEventListener('keyup', stopPlayer);
 background.onload = function() {
 update();
 }
