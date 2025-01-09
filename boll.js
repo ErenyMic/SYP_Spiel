@@ -1,8 +1,7 @@
-const canvas = document.getElementById("canvas");
+const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-
 
 const background = new Image();
 background.src = 'Hintergrund.jpg'; // Replace with the path to your background image
@@ -15,9 +14,9 @@ playerImage.src = 'korb-neu.png'; // Replace with the path to your player image
 
 const player = {
     x: canvas.width / 2,
-    y: canvas.height - 50,
-    width: 100,
-    height: 50,
+    y: canvas.height - 30,
+    width: 50,
+    height: 50, // Adjusted to match the image dimensions
     dx: 0
 };
 
@@ -28,18 +27,21 @@ const ball = {
     dy: 2
 };
 
+
+
 function drawPlayer() {
     ctx.drawImage(playerImage, player.x, player.y, player.width, player.height);
 }
 
-
 function drawBall() {
     ctx.drawImage(ballImage, ball.x - ball.radius, ball.y - ball.radius, ball.radius * 2, ball.radius * 2);
-
 }
+
 function drawBackground() {
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 }
+
+
 function update() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -51,7 +53,7 @@ function update() {
 
     if (ball.y + ball.radius > canvas.height) {
         ball.y = canvas.height / 2;
-    }
+        }
 
     player.x += player.dx;
 
@@ -62,14 +64,6 @@ function update() {
     }
 
     requestAnimationFrame(update);
-}
-
-function movePlayer(e) {
-    if (e.key === 'ArrowLeft') {
-        player.dx = -5;
-    } else if (e.key === 'ArrowRight') {
-        player.dx = 5;
-    }
 }
 
 function movePlayer(e) {
