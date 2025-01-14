@@ -44,7 +44,7 @@ function gameLogic() {
     ball.y += ball.dy;
 
     if (ball.y + ball.radius > canvas.height) {
-        ball.y = Math.random() * (canvas.height * 1 / 3) + canvas.height / 3; // Random y position but at least 1/3 of the canvas height
+        ball.y = Math.random() * (canvas.height / 2 - ball.radius * 2) + ball.radius; // Random y position but not lower than half of the canvas height
         ball.x = Math.random() * (canvas.width - ball.radius * 2) + ball.radius; // Set a random horizontal position
         document.getElementById('lives').innerHTML = `Lives: ${--game.lives}`; // Decrease lives
 
@@ -65,12 +65,12 @@ function gameLogic() {
     let coll = intersect(player, ball);
     if (coll) {
         document.getElementById('score').innerHTML = `Score: ${++game.score}`;
-        ball.y = Math.random() * (canvas.height * 1 / 3) + canvas.height / 3; // Reset the ball's position to a random y position but at least 1/3 of the canvas height
+        ball.y = Math.random() * (canvas.height / 2 - ball.radius * 2) + ball.radius; // Reset the ball's position to a random y position but not lower than half of the canvas height
         ball.x = Math.random() * (canvas.width - ball.radius * 2) + ball.radius; // Set a random horizontal position
 
         // Increase ball speed and level after every 10 points
         if (game.score % 10 === 0) {
-            ball.dy *= 2;
+            ball.dy += 2;
             document.getElementById('level').innerHTML = `Level: ${++game.level}`;
         }
     }
