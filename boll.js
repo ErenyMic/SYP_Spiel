@@ -80,6 +80,20 @@ function displayGameOver() {
     gameRunning = false; // Stop the game loop
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(gameOverImage, 0, 0, canvas.width, canvas.height);
+    document.getElementById('restartButton').style.display = 'block'; // Show the restart button
+}
+
+function restartGame() {
+    game.lives = 5;
+    game.score = 0;
+    game.level = 1;
+    ball.dy = 2;
+    document.getElementById('score').innerHTML = `Score: ${game.score}`;
+    document.getElementById('lives').innerHTML = `Lives: ${game.lives}`;
+    document.getElementById('level').innerHTML = `Level: ${game.level}`;
+    document.getElementById('restartButton').style.display = 'none'; // Hide the restart button
+    gameRunning = true;
+    update();
 }
 
 function drawPlayer() {
