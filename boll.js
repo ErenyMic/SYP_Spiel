@@ -12,6 +12,12 @@ ballImage.src = 'Ball-removebg-preview.png'; // Replace with the path to your ba
 const playerImage = new Image();
 playerImage.src = 'korb-neu.png'; // Replace with the path to your player image
 
+var game = {
+    lives: 5, // Start with 5 lives
+    score: 0,
+    level: 1,
+}
+
 const player = {
     x: canvas.width / 2,
     y: canvas.height - 50,
@@ -27,7 +33,36 @@ const ball = {
     dy: 2
 };
 
+function gameLogic() {
+    ball.y += ball.dy;
 
+    if (ball.y + ball.radius > canvas.height) {
+        ball.y = Math.random() * (canvas.height * 1 / 3) + canvas.height / 3; // Random y position but at least 1/3 of the canvas height
+        ball.x = Math.random() * (canvas.width - ball.radius * 2) + ball.radius; // Set a random horizontal position
+        document.getElementById('lives').innerHTML = `Lives: ${--game.lives}`; // Decrease lives
+    }
+
+    player.x += player.dx;
+
+    if (player.x < 0) {
+        player.x = 0;
+    } else if (player.x + player.width > canvas.width) {
+        player.x = canvas.width - player.width;
+    }
+
+    let coll = intersect(player, ball);
+    if (coll) {
+        document.getElementById('score').innerHTML = `Score: ${++game.score}`;
+        ball.y = Math.random() * (canvas.height * 1 / 3) + canvas.height / 3; // Reset the ball's position to a random y position but at least 1/3 of the canvas height
+        ball.x = Math.random() * (canvas.width - ball.radius * 2) + ball.radius; // Set a random horizontal position
+
+        // Increase ball speed and level after every 10 points
+        if (game.score % 10 === 0) {
+            ball.dy *= 2;
+            document.getElementById('level').innerHTML = `Level: ${++game.level}`;
+        }
+    }
+}
 
 function drawPlayer() {
     ctx.drawImage(playerImage, player.x, player.y, player.width, player.height);
@@ -49,19 +84,7 @@ function update() {
     drawPlayer();
     drawBall();
 
-    ball.y += ball.dy;
-
-    if (ball.y + ball.radius > canvas.height) {
-        ball.y = canvas.height / 2;
-        }
-
-    player.x += player.dx;
-
-    if (player.x < 0) {
-        player.x = 0;
-    } else if (player.x + player.width > canvas.width) {
-        player.x = canvas.width - player.width;
-    }
+    gameLogic(); // Call gameLogic to update the ball's position
 
     requestAnimationFrame(update);
 }
@@ -76,6 +99,29 @@ function movePlayer(e) {
     } else if (player.x + player.width > canvas.width) {
         player.x = canvas.width - player.width;
     }
+}
+
+function intersect(player, ball) {
+    const distX = Math.abs(ball.x - player.x - player.width / 2);
+    const distY = Math.abs(ball.y - player.y - player.height / 2);
+
+    if (distX > (player.width / 2 + ball.radius)) {
+        return false;
+    }
+    if (distY > (player.height / 2 + ball.radius)) {
+        return false;
+    }
+
+    if (distX <= (player.width / 2)) {
+        return true;
+    }
+    if (distY <= (player.height / 2)) {
+        return true;
+    }
+
+    const dx = distX - player.width / 2;
+    const dy = distY - player.height / 2;
+    return (dx * dx + dy * dy <= (ball.radius * ball.radius));
 }
 
 document.addEventListener('mousemove', movePlayer);
