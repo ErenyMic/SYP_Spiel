@@ -13,7 +13,7 @@ const playerImage = new Image();
 playerImage.src = 'korb-neu.png'; // Replace with the path to your player image
 
 const gameOverImage = new Image();
-gameOverImage.src = 'Win.jpg'; // Replace with the path to your game over image
+gameOverImage.src = 'loose.jpg'; // Replace with the path to your game over image
 
 var game = {
     lives: 5, // Start with 5 lives
