@@ -12,11 +12,16 @@ ballImage.src = 'Ball-removebg-preview.png'; // Replace with the path to your ba
 const playerImage = new Image();
 playerImage.src = 'korb-neu.png'; // Replace with the path to your player image
 
+const gameOverImage = new Image();
+gameOverImage.src = 'Win.jpg'; // Replace with the path to your game over image
+
 var game = {
     lives: 5, // Start with 5 lives
     score: 0,
     level: 1,
 }
+
+var gameRunning = true; // Flag to control the game loop
 
 const player = {
     x: canvas.width / 2,
@@ -34,12 +39,19 @@ const ball = {
 };
 
 function gameLogic() {
+    if (!gameRunning) return; // Stop game logic if the game is over
+
     ball.y += ball.dy;
 
     if (ball.y + ball.radius > canvas.height) {
         ball.y = Math.random() * (canvas.height * 1 / 3) + canvas.height / 3; // Random y position but at least 1/3 of the canvas height
         ball.x = Math.random() * (canvas.width - ball.radius * 2) + ball.radius; // Set a random horizontal position
         document.getElementById('lives').innerHTML = `Lives: ${--game.lives}`; // Decrease lives
+
+        if (game.lives <= 0) {
+            displayGameOver();
+            return;
+        }
     }
 
     player.x += player.dx;
@@ -64,6 +76,12 @@ function gameLogic() {
     }
 }
 
+function displayGameOver() {
+    gameRunning = false; // Stop the game loop
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(gameOverImage, 0, 0, canvas.width, canvas.height);
+}
+
 function drawPlayer() {
     ctx.drawImage(playerImage, player.x, player.y, player.width, player.height);
 }
@@ -78,6 +96,8 @@ function drawBackground() {
 
 
 function update() {
+    if (!gameRunning) return; // Stop the update loop if the game is over
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     drawBackground();
