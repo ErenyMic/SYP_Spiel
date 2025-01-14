@@ -1,4 +1,4 @@
-const canvas = document.getElementById("canvas");
+const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -14,9 +14,9 @@ playerImage.src = 'korb-neu.png'; // Replace with the path to your player image
 
 const player = {
     x: canvas.width / 2,
-    y: canvas.height - 50,
-    width: 100,
-    height: 50,
+    y: canvas.height - 30,
+    width: 50,
+    height: 50, // Adjusted to match the image dimensions
     dx: 0
 };
 
@@ -27,18 +27,20 @@ const ball = {
     dy: 2
 };
 
+
+
 function drawPlayer() {
     ctx.drawImage(playerImage, player.x, player.y, player.width, player.height);
 }
 
-
 function drawBall() {
     ctx.drawImage(ballImage, ball.x - ball.radius, ball.y - ball.radius, ball.radius * 2, ball.radius * 2);
-
 }
+
 function drawBackground() {
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 }
+
 
 function update() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -47,12 +49,11 @@ function update() {
     drawPlayer();
     drawBall();
 
-    ball.y += ball.dy * 2;
+    ball.y += ball.dy;
 
     if (ball.y + ball.radius > canvas.height) {
-        ball.y = canvas.height /8 ;
-        ball.x = Math.random() * canvas.width;
-    }
+        ball.y = canvas.height / 2;
+        }
 
     player.x += player.dx;
 
@@ -66,11 +67,21 @@ function update() {
 }
 
 function movePlayer(e) {
-    if (e.key === 'ArrowLeft') {
-        player.dx = -5;
-    } else if (e.key === 'ArrowRight') {
-        player.dx = 5;
+    const canvasRect = canvas.getBoundingClientRect();
+    player.x = e.clientX - canvasRect.left - player.width / 2;
+
+    // Ensure the player stays within the canvas boundaries
+    if (player.x < 0) {
+        player.x = 0;
+    } else if (player.x + player.width > canvas.width) {
+        player.x = canvas.width - player.width;
     }
+}
+
+document.addEventListener('mousemove', movePlayer);
+
+background.onload = function() {
+    update();
 }
 
 function stopPlayer(e) {
@@ -78,9 +89,6 @@ function stopPlayer(e) {
         player.dx = 0;
     }
 }
-
-document.addEventListener('keydown', movePlayer);
-document.addEventListener('keyup', stopPlayer);
 background.onload = function() {
 update();
 }
