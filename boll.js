@@ -1,4 +1,4 @@
-const canvas = document.getElementById('gameCanvas');
+const canvas = document.getElementById('canvas'); // Updated to match the HTML file
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -14,8 +14,8 @@ playerImage.src = 'korb-neu.png'; // Replace with the path to your player image
 
 const player = {
     x: canvas.width / 2,
-    y: canvas.height - 30,
-    width: 50,
+    y: canvas.height - 50,
+    width: 100,
     height: 50, // Adjusted to match the image dimensions
     dx: 0
 };
