@@ -69,7 +69,7 @@ function gameLogic() {
         ball.x = Math.random() * (canvas.width - ball.radius * 2) + ball.radius; // Set a random horizontal position
 
         // Increase ball speed and level after every 10 points
-        if (game.score % 10 === 0) {
+        if (game.score % 3 === 0) {
             ball.dy += 2;
             game.level++;
         }
@@ -81,16 +81,16 @@ function displayGameOver() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    const imgWidth = canvas.width * 0.4;
-    const imgHeight = canvas.height * 0.8;
+    const imgWidth = canvas.width * 0.35;
+    const imgHeight = canvas.height * 0.7;
     const imgX = (canvas.width - imgWidth) / 2;
     const imgY = (canvas.height - imgHeight) / 2;
     ctx.drawImage(gameOverImage, imgX, imgY, imgWidth, imgHeight);
     const restartButton = document.getElementById('restartButton');
     restartButton.style.display = 'block'; // Show the restart button
     restartButton.style.position = 'absolute';
-    restartButton.style.left = `${imgX + imgWidth / 2 - restartButton.offsetWidth / 2}px`;
-    restartButton.style.top = `${imgY + imgHeight + 20}px`; // Position it below the image with some margin
+    restartButton.style.left = `${canvas.offsetLeft + imgX + imgWidth / 2 - restartButton.offsetWidth / 2}px`;
+    restartButton.style.top = `${canvas.offsetTop + imgY + imgHeight + 10}px`; // Position it directly below the image with a small margin
 }
 
 function restartGame() {
