@@ -46,7 +46,7 @@ function gameLogic() {
     if (ball.y + ball.radius > canvas.height) {
         ball.y = Math.random() * (canvas.height / 2 - ball.radius * 2) + ball.radius; // Random y position but not lower than half of the canvas height
         ball.x = Math.random() * (canvas.width - ball.radius * 2) + ball.radius; // Set a random horizontal position
-        document.getElementById('lives').innerHTML = `Lives: ${--game.lives}`; // Decrease lives
+        game.lives--; // Decrease lives
 
         if (game.lives <= 0) {
             displayGameOver();
@@ -64,14 +64,14 @@ function gameLogic() {
 
     let coll = intersect(player, ball);
     if (coll) {
-        document.getElementById('score').innerHTML = `Score: ${++game.score}`;
+        game.score++;
         ball.y = Math.random() * (canvas.height / 2 - ball.radius * 2) + ball.radius; // Reset the ball's position to a random y position but not lower than half of the canvas height
         ball.x = Math.random() * (canvas.width - ball.radius * 2) + ball.radius; // Set a random horizontal position
 
         // Increase ball speed and level after every 10 points
         if (game.score % 10 === 0) {
             ball.dy += 2;
-            document.getElementById('level').innerHTML = `Level: ${++game.level}`;
+            game.level++;
         }
     }
 }
@@ -88,9 +88,6 @@ function restartGame() {
     game.score = 0;
     game.level = 1;
     ball.dy = 2;
-    document.getElementById('score').innerHTML = `Score: ${game.score}`;
-    document.getElementById('lives').innerHTML = `Lives: ${game.lives}`;
-    document.getElementById('level').innerHTML = `Level: ${game.level}`;
     document.getElementById('restartButton').style.display = 'none'; // Hide the restart button
     gameRunning = true;
     update();
@@ -108,6 +105,13 @@ function drawBackground() {
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 }
 
+function drawHUD() {
+    ctx.font = '20px Arial';
+    ctx.fillStyle = 'white';
+    ctx.fillText(`Score: ${game.score}`, 10, 30);
+    ctx.fillText(`Lives: ${game.lives}`, 10, 60);
+    ctx.fillText(`Level: ${game.level}`, 10, 90);
+}
 
 function update() {
     if (!gameRunning) return; // Stop the update loop if the game is over
@@ -117,6 +121,7 @@ function update() {
     drawBackground();
     drawPlayer();
     drawBall();
+    drawHUD(); // Draw the score, lives, and level
 
     gameLogic(); // Call gameLogic to update the ball's position
 
