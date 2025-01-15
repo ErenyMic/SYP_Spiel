@@ -16,7 +16,7 @@ const gameOverImage = new Image();
 gameOverImage.src = 'loose.jpg'; // Replace with the path to your game over image
 
 var game = {
-    lives: 5, // Start with 5 lives
+    lives: 1, // Start with 5 lives
     score: 0,
     level: 1,
 }
@@ -79,12 +79,22 @@ function gameLogic() {
 function displayGameOver() {
     gameRunning = false; // Stop the game loop
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(gameOverImage, 0, 0, canvas.width, canvas.height);
-    document.getElementById('restartButton').style.display = 'block'; // Show the restart button
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const imgWidth = canvas.width * 0.4;
+    const imgHeight = canvas.height * 0.8;
+    const imgX = (canvas.width - imgWidth) / 2;
+    const imgY = (canvas.height - imgHeight) / 2;
+    ctx.drawImage(gameOverImage, imgX, imgY, imgWidth, imgHeight);
+    const restartButton = document.getElementById('restartButton');
+    restartButton.style.display = 'block'; // Show the restart button
+    restartButton.style.position = 'absolute';
+    restartButton.style.left = `${imgX + imgWidth / 2 - restartButton.offsetWidth / 2}px`;
+    restartButton.style.top = `${imgY + imgHeight + 20}px`; // Position it below the image with some margin
 }
 
 function restartGame() {
-    game.lives = 5;
+    game.lives = 2;
     game.score = 0;
     game.level = 1;
     ball.dy = 2;
