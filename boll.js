@@ -1,28 +1,28 @@
-const canvas = document.getElementById('canvas'); // Updated to match the HTML file
+const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 const background = new Image();
-background.src = 'Hintergrund.jpg'; // Replace with the path to your background image
+background.src = 'Hintergrund.jpg';
 
 const ballImage = new Image();
-ballImage.src = 'Ball-removebg-preview.png'; // Replace with the path to your ball image
+ballImage.src = 'Ball-removebg-preview.png';
 
 const playerImage = new Image();
-playerImage.src = 'korb-neu.png'; // Replace with the path to your player image
+playerImage.src = 'korb-neu.png';
 
 const gameOverImage = new Image();
-gameOverImage.src = 'loose.jpg'; // Replace with the path to your game over image
+gameOverImage.src = 'loose.jpg';
 
 const footballImage = new Image();
-footballImage.src = 'football2.png'; // Replace with the path to your football image
+footballImage.src = 'football2.png';
 
 const btn = document.getElementById('restartButton');
 btn.addEventListener('click', restartGame);
 
 var game = {
-    lives: 1, // Start with 5 lives
+    lives: 1, // lives
     score: 0,
     level: 1,
 }
@@ -33,7 +33,7 @@ const player = {
     x: canvas.width / 2,
     y: canvas.height - 50,
     width: 100,
-    height: 50, // Adjusted to match the image dimensions
+    height: 50,
     dx: 0
 };
 
@@ -41,17 +41,17 @@ const ball = {
     x: canvas.width / 2,
     y: canvas.height / 2,
     radius: 50,
-    dy: 2
+    dy: 6
 };
 
 const football = {
     x: Math.random() * (canvas.width - 100) + 50,
     y: Math.random() * (canvas.height / 2 - 100) + 50,
     radius: 50,
-    dy: 2
+    dy: 6
 };
 
-background.onload = function() {
+background.onload = function () {
     update();
 };
 
@@ -94,6 +94,7 @@ function gameLogic() {
         // Increase ball speed and level after every 3 points
         if (game.score % 3 === 0) {
             ball.dy += 2;
+            football.dy = ball.dy; // Match football speed to ball speed
             game.level++;
         }
     }
@@ -122,7 +123,7 @@ function displayGameOver() {
     const imgY = (canvas.height - imgHeight) / 2;
     ctx.font = '50px Arial';
     ctx.fillStyle = 'white';
-    ctx.fillText('Game Over', imgX + imgWidth / 2 - ctx.measureText('Game Over').width / 2, imgY - 20); // Draw "Game Over" text above the image
+    ctx.fillText('Game Over', imgX + imgWidth / 2 - ctx.measureText('Game Over').width / 2, imgY - 20); 
     ctx.drawImage(gameOverImage, imgX, imgY, imgWidth, imgHeight);
     btn.style.display = 'block'; // Show the restart button
     btn.style.position = 'absolute';
@@ -134,8 +135,8 @@ function restartGame() {
     game.lives = 2;
     game.score = 0;
     game.level = 1;
-    ball.dy = 2;
-    football.dy = 2;
+    ball.dy = 6;
+    football.dy = 6;
     btn.style.display = 'none'; // Hide the restart button
     gameRunning = true;
     update();
@@ -214,7 +215,7 @@ function intersect(player, ball) {
 
 document.addEventListener('mousemove', movePlayer);
 
-background.onload = function() {
+background.onload = function () {
     update();
 }
 
@@ -223,6 +224,6 @@ function stopPlayer(e) {
         player.dx = 0;
     }
 }
-background.onload = function() {
+background.onload = function () {
     update();
 }
