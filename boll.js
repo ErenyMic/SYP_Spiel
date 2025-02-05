@@ -13,7 +13,7 @@ const playerImage = new Image();
 playerImage.src = 'korb-neu.png';
 
 const gameOverImage = new Image();
-gameOverImage.src = 'loose.jpg';
+gameOverImage.src = 'loose_pic.jpg';
 
 const footballImage = new Image();
 footballImage.src = 'football2.png';
