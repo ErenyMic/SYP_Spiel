@@ -18,11 +18,11 @@ gameOverImage.src = 'loose.jpg'; // Replace with the path to your game over imag
 const footballImage = new Image();
 footballImage.src = 'football2.png'; // Replace with the path to your football image
 
-const restartButton = document.getElementById('restartButton');
-restartButton.addEventListener('click', restartGame);
+const btn = document.getElementById('restartButton');
+btn.addEventListener('click', restartGame);
 
 var game = {
-    lives: 3, // Start with 5 lives
+    lives: 1, // Start with 5 lives
     score: 0,
     level: 1,
 }
@@ -120,11 +120,14 @@ function displayGameOver() {
     const imgHeight = canvas.height * 0.7;
     const imgX = (canvas.width - imgWidth) / 2;
     const imgY = (canvas.height - imgHeight) / 2;
+    ctx.font = '50px Arial';
+    ctx.fillStyle = 'white';
+    ctx.fillText('Game Over', imgX + imgWidth / 2 - ctx.measureText('Game Over').width / 2, imgY - 20); // Draw "Game Over" text above the image
     ctx.drawImage(gameOverImage, imgX, imgY, imgWidth, imgHeight);
-    restartButton.style.display = 'block'; // Show the restart button
-    restartButton.style.position = 'absolute';
-    restartButton.style.left = `${canvas.offsetLeft + imgX + imgWidth / 2 - restartButton.offsetWidth / 2}px`;
-    restartButton.style.top = `${canvas.offsetTop + imgY + imgHeight + 10}px`; // Position it directly below the image with a small margin
+    btn.style.display = 'block'; // Show the restart button
+    btn.style.position = 'absolute';
+    btn.style.left = `${canvas.offsetLeft + imgX + imgWidth / 2 - btn.offsetWidth / 2}px`;
+    btn.style.top = `${canvas.offsetTop + imgY + imgHeight + 10}px`; // Position it directly below the image with a small margin
 }
 
 function restartGame() {
@@ -133,7 +136,7 @@ function restartGame() {
     game.level = 1;
     ball.dy = 2;
     football.dy = 2;
-    restartButton.style.display = 'none'; // Hide the restart button
+    btn.style.display = 'none'; // Hide the restart button
     gameRunning = true;
     update();
 }
