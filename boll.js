@@ -22,7 +22,7 @@ const btn = document.getElementById('restartButton');
 btn.addEventListener('click', restartGame);
 
 var game = {
-    lives: 1, // lives
+    lives: 3, // lives
     score: 0,
     level: 1,
 }
