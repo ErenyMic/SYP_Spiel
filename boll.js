@@ -41,14 +41,14 @@ const ball = {
     x: canvas.width / 2,
     y: canvas.height / 2,
     radius: 50,
-    dy: 6
+    dy: 4
 };
 
 const football = {
     x: Math.random() * (canvas.width - 100) + 50,
     y: Math.random() * (canvas.height / 2 - 100) + 50,
     radius: 50,
-    dy: 6
+    dy: 4
 };
 
 background.onload = function () {
@@ -135,8 +135,8 @@ function restartGame() {
     game.lives = 2;
     game.score = 0;
     game.level = 1;
-    ball.dy = 6;
-    football.dy = 6;
+    ball.dy = 4;
+    football.dy = 4;
     btn.style.display = 'none'; // Hide the restart button
     gameRunning = true;
     update();
