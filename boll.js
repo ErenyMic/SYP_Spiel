@@ -15,8 +15,14 @@ playerImage.src = 'korb-neu.png'; // Replace with the path to your player image
 const gameOverImage = new Image();
 gameOverImage.src = 'loose.jpg'; // Replace with the path to your game over image
 
+const footballImage = new Image();
+footballImage.src = 'football2.png'; // Replace with the path to your football image
+
+const restartButton = document.getElementById('restartButton');
+restartButton.addEventListener('click', restartGame);
+
 var game = {
-    lives: 1, // Start with 5 lives
+    lives: 3, // Start with 5 lives
     score: 0,
     level: 1,
 }
@@ -38,10 +44,22 @@ const ball = {
     dy: 2
 };
 
+const football = {
+    x: Math.random() * (canvas.width - 100) + 50,
+    y: Math.random() * (canvas.height / 2 - 100) + 50,
+    radius: 50,
+    dy: 2
+};
+
+background.onload = function() {
+    update();
+};
+
 function gameLogic() {
     if (!gameRunning) return; // Stop game logic if the game is over
 
     ball.y += ball.dy;
+    football.y += football.dy;
 
     if (ball.y + ball.radius > canvas.height) {
         ball.y = Math.random() * (canvas.height / 2 - ball.radius * 2) + ball.radius; // Random y position but not lower than half of the canvas height
@@ -54,6 +72,11 @@ function gameLogic() {
         }
     }
 
+    if (football.y + football.radius > canvas.height) {
+        football.y = Math.random() * (canvas.height / 2 - football.radius * 2) + football.radius; // Random y position but not lower than half of the canvas height
+        football.x = Math.random() * (canvas.width - football.radius * 2) + football.radius; // Set a random horizontal position
+    }
+
     player.x += player.dx;
 
     if (player.x < 0) {
@@ -62,16 +85,28 @@ function gameLogic() {
         player.x = canvas.width - player.width;
     }
 
-    let coll = intersect(player, ball);
-    if (coll) {
+    let collBall = intersect(player, ball);
+    if (collBall) {
         game.score++;
         ball.y = Math.random() * (canvas.height / 2 - ball.radius * 2) + ball.radius; // Reset the ball's position to a random y position but not lower than half of the canvas height
         ball.x = Math.random() * (canvas.width - ball.radius * 2) + ball.radius; // Set a random horizontal position
 
-        // Increase ball speed and level after every 10 points
+        // Increase ball speed and level after every 3 points
         if (game.score % 3 === 0) {
             ball.dy += 2;
             game.level++;
+        }
+    }
+
+    let collFootball = intersect(player, football);
+    if (collFootball) {
+        game.lives--; // Decrease lives if football is caught
+        football.y = Math.random() * (canvas.height / 2 - football.radius * 2) + football.radius; // Reset the football's position to a random y position but not lower than half of the canvas height
+        football.x = Math.random() * (canvas.width - football.radius * 2) + football.radius; // Set a random horizontal position
+
+        if (game.lives <= 0) {
+            displayGameOver();
+            return;
         }
     }
 }
@@ -86,7 +121,6 @@ function displayGameOver() {
     const imgX = (canvas.width - imgWidth) / 2;
     const imgY = (canvas.height - imgHeight) / 2;
     ctx.drawImage(gameOverImage, imgX, imgY, imgWidth, imgHeight);
-    const restartButton = document.getElementById('restartButton');
     restartButton.style.display = 'block'; // Show the restart button
     restartButton.style.position = 'absolute';
     restartButton.style.left = `${canvas.offsetLeft + imgX + imgWidth / 2 - restartButton.offsetWidth / 2}px`;
@@ -98,7 +132,8 @@ function restartGame() {
     game.score = 0;
     game.level = 1;
     ball.dy = 2;
-    document.getElementById('restartButton').style.display = 'none'; // Hide the restart button
+    football.dy = 2;
+    restartButton.style.display = 'none'; // Hide the restart button
     gameRunning = true;
     update();
 }
@@ -109,6 +144,7 @@ function drawPlayer() {
 
 function drawBall() {
     ctx.drawImage(ballImage, ball.x - ball.radius, ball.y - ball.radius, ball.radius * 2, ball.radius * 2);
+    ctx.drawImage(footballImage, football.x - football.radius, football.y - football.radius, football.radius * 2, football.radius * 2);
 }
 
 function drawBackground() {
@@ -185,5 +221,5 @@ function stopPlayer(e) {
     }
 }
 background.onload = function() {
-update();
+    update();
 }
